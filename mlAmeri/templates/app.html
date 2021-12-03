@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link href="{% static 'style.css' %}" rel="stylesheet">
+<div class="container d-flex justify-content-center mt-100">
+    <div class="row">
+      <form method="post" action="{% url 'index' %}" class="dropzone">
+        <div class="col-md-12">
+              <div class="form-group files">
+                <label>Upload Your File </label>
+                <input type="file"  name='image' class="form-control" multiple="">
+              </div>
+
+        </div>
+<!--          Filter by price interval: <b>€ 10</b> <input id="ex2" type="range" class="col-sm-2" value="" data-min="10" data-max="1000" data-step="5" data-value="[250,450]"/> <b>€ 1000</b>-->
+        <label for="customRange1" class="form-label">VAR 1</label>
+        <input type="range" class="form-range" name='min' min="50" max="500" id="customRange1">
+        <label for="customRange2" class="form-label">VAR 2</label>
+        <input type="range" class="form-range" name='max' min="50" max="500" id="customRange2">
+        <button class="btn btn-primary" type="submit">Result</button>
+      </form>
+    </div>
+</div>
+
+<!--  <div class="file-upload-wrapper">-->
+<!--    <input type="file" name="image" id="input-file-now" class="file-upload" />-->
+<!--  </div>-->
+<!--  -->
+
+
+
+<img src="{{input.image.url}}">
+{% endblock content %}
