@@ -132,20 +132,27 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
     im.save(ResultDir_M_C+'/3.png')
     return Out_M_Image, Out_C_Image, Out_M_C_Image
 
+def upload_image(request):
+    if request.method == 'POST':
+        return request.FILES
 
-@csrf_exempt
+# @csrf_exempt
 def index(request):
     if request.method=='POST':
-        if request.FILES.get("image", None) :
+        for r in request.POST:print((r))
+        print(type(request.POST.get('image')))
+        if request.FILES:
+            print("yeeessssss")
             if int(request.POST.get("min", None))>=50 and int(request.POST.get("max", None))<=500:
                 # uuid=str(uuid4())
                 # imgurl = 'Input/'+uuid+"/"+request.POST.get("image")
                 Input.objects.create(image=request.FILES.get("image"),variable_1=int(request.POST.get("min")),variable_2=int(request.POST.get("max")))
                 print(request.POST.get("image", None))
                 # return redirect('result')
-                DETECTING(request.FILES.get("image"),int(request.POST.get("min")),int(request.POST.get("max")))
+                DETECTING(request.FILES.get("image"), int(request.POST.get("min")), int(request.POST.get("max")))
                 return HttpResponse('Done')
-        return HttpResponse('nofile')
+        else:
+            return HttpResponse(request.FILES)
     if request.method=='GET':
         return render(request,'app.html')
 
