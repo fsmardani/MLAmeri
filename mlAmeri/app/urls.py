@@ -3,10 +3,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from .views import get_images,index
+from .views import get_images,index,result
 urlpatterns = [
     path('get/<str:pk>', get_images),
     path('',index,name='index'),
+    path('result/<str:id>',result,name='result')
 ]
 
 if settings.DEBUG:

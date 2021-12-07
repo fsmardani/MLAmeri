@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 import tensorflow as tf
+from django.urls import reverse
 from tensorflow import keras
 from cv2 import cv2
 from tensorflow.keras.preprocessing import image_dataset_from_directory
@@ -15,16 +16,17 @@ from django.shortcuts import render, redirect
 import uuid
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
-from .models import Input
+from .models import Input,Output
+# from utils import coutput_path,moutput_path,cmoutput_path
 
 
 def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
-    M_NetDir = 'CNN.h5'
-    C_NetDir = 'CNN.h5'
-    ResultDir_C = 'img/output'
-    TemplatePachDir ='media/temp'
-    ResultDir_M = 'media/output'
-    ResultDir_M_C = 'media/output'
+    M_NetDir = 'app/CNN.h5'
+    C_NetDir = 'app/CNN.h5'
+    ResultDir_C = 'output'
+    TemplatePachDir = 'temp'
+    ResultDir_M = 'output'
+    ResultDir_M_C = 'output'
 
 
     imtest = cv2.imread(SourceInputImageDir, 1)
@@ -66,7 +68,8 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
                                 (0, 0, 255), 5)
     im = Image.fromarray(imtest)
     Out_M_Image = im
-    im.save(ResultDir_M+'/1.png')
+    # im.save(ResultDir_M+'/1.png')
+
     imtest = cv2.imread(SourceInputImageDir, 1)
     CalcIm = imtest
     model = keras.models.load_model(C_NetDir)
@@ -104,7 +107,7 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
                                 (0, 255, 0), 5)
     im = Image.fromarray(CalcIm)
     Out_C_Image = im
-    im.save(ResultDir_C+'/2.png')
+    # im.save(ResultDir_C+'/2.png')
 
     M_C_Im = imtest
     WindowShape = M_WindowShape
@@ -129,33 +132,28 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
                             5)
     im = Image.fromarray(M_C_Im)
     Out_M_C_Image = im
-    im.save(ResultDir_M_C+'/3.png')
+    # im.save(ResultDir_M_C+'/3.png')
     return Out_M_Image, Out_C_Image, Out_M_C_Image
 
-def upload_image(request):
-    if request.method == 'POST':
-        return request.FILES
 
 # @csrf_exempt
 def index(request):
     if request.method=='POST':
-        for r in request.POST:print((r))
-        print(type(request.POST.get('image')))
         if request.FILES:
-            print("yeeessssss")
             if int(request.POST.get("min", None))>=50 and int(request.POST.get("max", None))<=500:
-                # uuid=str(uuid4())
-                # imgurl = 'Input/'+uuid+"/"+request.POST.get("image")
-                Input.objects.create(image=request.FILES.get("image"),variable_1=int(request.POST.get("min")),variable_2=int(request.POST.get("max")))
-                print(request.POST.get("image", None))
-                # return redirect('result')
-                DETECTING(request.FILES.get("image"), int(request.POST.get("min")), int(request.POST.get("max")))
-                return HttpResponse('Done')
+                obj = Input.objects.create(image=request.FILES.get("image"),variable_1=int(request.POST.get("min")),variable_2=int(request.POST.get("max")))
+                c_res,m_res,cm_res =DETECTING(f'{obj.image}', int(request.POST.get("min")), int(request.POST.get("max")))
+                print(type(c_res))
+                Output.objects.create(input_ids=obj,Cimage=c_res,Mimage=m_res,CMimage=cm_res)
+                return redirect(reverse('result'))
         else:
             return HttpResponse(request.FILES)
     if request.method=='GET':
         return render(request,'app.html')
 
+def result(request,id):
+    obj = Output.objects.filter(input__id=id)[0]
+    return render(request,'result.html',{'results':obj})
 
 def get_images(request,pk):
     inputq = Input.objects.filter(pk=pk)[0]
