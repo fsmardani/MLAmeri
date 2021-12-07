@@ -4,42 +4,61 @@
 <link href="{% static 'style.css' %}" rel="stylesheet">
 <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <link
-  rel="stylesheet"
-  href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
-  type="text/css"
+        href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
+        rel="stylesheet"
+        type="text/css"
 />
+
+<br>
+        <br>
+        <br>
 <div class="container d-flex justify-content-center mt-100">
+
     <div class="row">
-<!--      <form method="post" action="{% url 'index' %}"  >-->
-<!--        <div class="col-md-12">-->
-<!--              <div class="form-group">-->
-<!--                <label for="exampleFormControlFile1">Example file input</label>-->
-<!--                  {% csrf_token %}-->
-<!--                <input type="file" name="image" class="form-control-file" id="exampleFormControlFile1">-->
-<!--              </div>-->
-<!--&lt;!&ndash;              <div class="form-group files">&ndash;&gt;-->
-<!--&lt;!&ndash;                <label>Upload Your File </label>&ndash;&gt;-->
-<!--&lt;!&ndash;                <input type="file"  name='image' class="form-control" multiple="" >&ndash;&gt;-->
-<!--&lt;!&ndash;              </div>&ndash;&gt;-->
-<!--            <div class="my-dropzone">-->
-<!--                {% csrf_token %}-->
-<!--                <input type="file"  name='image' class="dropzone" multiple="" >-->
-<!--            </div>-->
 
-                <form action="{% url 'index' %}" method="post" enctype="multipart/form-data"              class="form-horizontal">            {% csrf_token %}            <input type="file" name="image" class="form-control" required>
-                <input type="submit" value="Upload" name="image" class="btn btn-primary btn-sm">
-<!--                </form>-->
+        <form action="{% url 'index' %}" class="form-horizontal" enctype="multipart/form-data" method="post">
+            <div class="col-md-12">
+            {% csrf_token %}
+            <input class="form-control" name="image" required type="file">
 
-<!--&lt;!&ndash;          Filter by price interval: <b>€ 10</b> <input id="ex2" type="range" class="col-sm-2" value="" data-min="10" data-max="1000" data-step="5" data-value="[250,450]"/> <b>€ 1000</b>&ndash;&gt;-->
-        <label for="customRange1" class="form-label">VAR 1</label>
-            {% csrf_token %}
-        <input type="range" class="form-range" name='min' min="50" max="500" id="customRange1">
-        <label for="customRange2" class="form-label">VAR 2</label>
-            {% csrf_token %}
-        <input type="range" class="form-range" name='max' min="50" max="500" id="customRange2">
-        <button class="btn btn-primary" type="submit">Result</button>
-<!--        </div>-->
-      </form>
+<!--                <div class="form-group">-->
+<!--                    <label for="exampleFormControlFile1">Example file input</label>-->
+<!--                    {% csrf_token %}-->
+<!--                    <input class="form-control-file" id="exampleFormControlFile1" name="image" type="file">-->
+<!--                </div>-->
+                <!--              <div class="form-group files">-->
+                <!--                <label>Upload Your File </label>-->
+                <!--                <input type="file"  name='image' class="form-control" multiple="" >-->
+                <!--              </div>-->
+                <!--            <div class="my-dropzone">-->
+                <!--                {% csrf_token %}-->
+                <!--                <input type="file"  name='image' class="dropzone" multiple="" >-->
+                <!--            </div>-->
+
+                <!--                </form>-->
+
+                <!--&lt;!&ndash;
+  Filter by price interval: <b>€ 10</b> <input id="ex2" type="range" class="col-sm-2" value="" data-min="10" data-max="1000" data-step="5" data-value="[250,450]"/> <b>€ 1000</b>&ndash;&gt;-->
+               <label class="form-label" >VAR 1</label>
+                <div class="range-wrap">
+
+                <div class="range-value" id="rangeV"></div>
+                {% csrf_token %}
+                <input id="range"  max="500" min="50" name='min' type="range">
+
+                </div>
+                <label class="form-label" >VAR 2</label>
+                <div class="range-wrap">
+                <div class="range-value" id="rangeVV" ></div>
+                {% csrf_token %}
+                <input id="rangee"  max="500" min="50" name='max' type="range">
+
+                </div>
+                <input class="btn btn-primary btn-sm" type="submit" value="Upload">
+
+<!--                <button class="btn btn-primary" type="submit">Result</button>-->
+                        </div>
+        </form>
     </div>
 </div>
 
@@ -49,15 +68,33 @@
 <!--  -->
 
 
-
 <img src="{{input.image.url}}">
 <script>
-var myDropzone = new Dropzone("#drop", {
-    dictDefaultMessage: "Upload your image here",
-    clickable: false,
-    url: "index",
-    maxFiles: 1,
-    acceptedFiles: ".jpg",".png"
-});
+const
+  range = document.getElementById('range'),
+  rangeV = document.getElementById('rangeV'),
+  setValue = ()=>{
+    const
+      newValue = Number( (range.value - range.min) * 100 / (range.max - range.min) ),
+      newPosition = 10 - (newValue * 0.2);
+    rangeV.innerHTML = `<span>${range.value}</span>`;
+    rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
+  };
+document.addEventListener("DOMContentLoaded", setValue);
+range.addEventListener('input', setValue);
+</script>
+<script>
+const
+  rangee = document.getElementById('rangee'),
+  rangeVV = document.getElementById('rangeVV'),
+  setValuee = ()=>{
+    const
+      newValue = Number( (rangee.value - rangee.min) * 100 / (rangee.max - rangee.min) ),
+      newPosition = 10 - (newValue * 0.2);
+    rangeVV.innerHTML = `<span>${rangee.value}</span>`;
+    rangeVV.style.left = `calc(${newValue}% + (${newPosition}px))`;
+  };
+document.addEventListener("DOMContentLoaded", setValuee);
+rangee.addEventListener('input', setValuee);
 </script>
 {% endblock content %}
