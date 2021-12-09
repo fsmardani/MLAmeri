@@ -12,60 +12,40 @@
 <br>
         <br>
         <br>
-<div class="container d-flex justify-content-center mt-100">
+<div class="container d-flex justify-content-center mt-100" style="background-color: rgba(255, 255, 255, 0.7);">
 
     <div class="row">
 
         <form action="{% url 'index' %}" class="form-horizontal" enctype="multipart/form-data" method="post">
             <div class="col-md-12">
+                    <br>
+    <br>
             {% csrf_token %}
             <input class="form-control" name="image" required type="file">
-
-<!--                <div class="form-group">-->
-<!--                    <label for="exampleFormControlFile1">Example file input</label>-->
-<!--                    {% csrf_token %}-->
-<!--                    <input class="form-control-file" id="exampleFormControlFile1" name="image" type="file">-->
-<!--                </div>-->
-                <!--              <div class="form-group files">-->
-                <!--                <label>Upload Your File </label>-->
-                <!--                <input type="file"  name='image' class="form-control" multiple="" >-->
-                <!--              </div>-->
-                <!--            <div class="my-dropzone">-->
-                <!--                {% csrf_token %}-->
-                <!--                <input type="file"  name='image' class="dropzone" multiple="" >-->
-                <!--            </div>-->
-
-                <!--                </form>-->
-
-                <!--&lt;!&ndash;
-  Filter by price interval: <b>€ 10</b> <input id="ex2" type="range" class="col-sm-2" value="" data-min="10" data-max="1000" data-step="5" data-value="[250,450]"/> <b>€ 1000</b>&ndash;&gt;-->
-               <label class="form-label" >VAR 1</label>
-                <div class="range-wrap">
-
-                <div class="range-value" id="rangeV"></div>
-                {% csrf_token %}
-                <input id="range"  max="500" min="50" name='min' type="range">
-
+                <div class="col-md-4">
+                    <label class="form-label" >VAR 1</label>
+                    <div class="range-wrap">
+                        <div class="range-value" id="rangeV"></div>
+                        {% csrf_token %}
+                        <input id="range"  max="500" min="50" name='min' type="range" value="150">
+                    </div>
                 </div>
-                <label class="form-label" >VAR 2</label>
-                <div class="range-wrap">
-                <div class="range-value" id="rangeVV" ></div>
-                {% csrf_token %}
-                <input id="rangee"  max="500" min="50" name='max' type="range">
+                <div class="col-md-6">
+                    <label class="form-label" >VAR 2</label>
+                    <div class="range-wrap">
+                        <div class="range-value" id="rangeVV" ></div>
+                        {% csrf_token %}
+                        <input id="rangee"  max="500" min="50" name='max' type="range" value="350">
 
+                    </div>
                 </div>
-                <input class="btn btn-primary btn-sm" type="submit" value="Upload">
+                <input class="btn btn-primary btn-sm" type="submit" value="Upload" >
 
 <!--                <button class="btn btn-primary" type="submit">Result</button>-->
                         </div>
         </form>
     </div>
 </div>
-
-<!--  <div class="file-upload-wrapper">-->
-<!--    <input type="file" name="image" id="input-file-now" class="file-upload" />-->
-<!--  </div>-->
-<!--  -->
 
 
 <img src="{{input.image.url}}">
@@ -97,4 +77,5 @@ const
 document.addEventListener("DOMContentLoaded", setValuee);
 rangee.addEventListener('input', setValuee);
 </script>
+
 {% endblock content %}

@@ -1,7 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    {{results.Cimage}}
-    {{results.Mimage}}
-    {{results.CMimage}}
+<div align="center">
+    <br>
+    <br>
+    <img src="{{results.Cimage.url}}" alt="" width="220" height="140">
+    <img src="{{results.Mimage.url}}" alt="" width="220" height="140">
+    <img src="{{results.CMimage.url}}" alt="" width="220" height="140">
+    <br>
+    <img src="{{results.Cimage.url}}" alt="" >
+    <br>
+    <img src="{{results.Mimage.url}}" alt="" >
+    <br>
+    <img src="{{results.CMimage.url}}" alt="">
+    <hr>
+    <a class="btn btn-primary" href="{% url 'index' %}">Home</a>
+</div>
 {% endblock content %}

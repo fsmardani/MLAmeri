@@ -1,15 +1,19 @@
+from io import StringIO
 from uuid import uuid4
 
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 import tensorflow as tf
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.urls import reverse
 from tensorflow import keras
 from cv2 import cv2
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 from tensorflow.keras.applications.resnet50 import preprocess_input, decode_predictions
 from tensorflow.keras.preprocessing import image
+
+
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -143,16 +147,25 @@ def index(request):
             if int(request.POST.get("min", None))>=50 and int(request.POST.get("max", None))<=500:
                 obj = Input.objects.create(image=request.FILES.get("image"),variable_1=int(request.POST.get("min")),variable_2=int(request.POST.get("max")))
                 c_res,m_res,cm_res =DETECTING(f'{obj.image}', int(request.POST.get("min")), int(request.POST.get("max")))
-                print(type(c_res))
-                Output.objects.create(input_ids=obj,Cimage=c_res,Mimage=m_res,CMimage=cm_res)
-                return redirect(reverse('result'))
+                save_to_output(obj,c_res,m_res,cm_res)
+                # Output.objects.create(input_ids=obj,Cimage=c_res,Mimage=m_res,CMimage=cm_res)
+                return redirect(reverse('result',kwargs={'id':obj.id}))
         else:
             return HttpResponse(request.FILES)
     if request.method=='GET':
         return render(request,'app.html')
 
+
+def save_to_output(input,c_res,m_res,cm_res):
+    print(input.id,c_res,m_res,cm_res)
+    c_res.save(f'Output/c{input.id}.jpg')
+    m_res.save(f'Output/m{input.id}.jpg')
+    cm_res.save(f'Output/cm{input.id}.jpg')
+    Output.objects.create(input_ids=input,Cimage=f'Output/c{input.id}.jpg',Mimage=f'Output/m{input.id}.jpg',CMimage=f'Output/cm{input.id}.jpg')
+
+
 def result(request,id):
-    obj = Output.objects.filter(input__id=id)[0]
+    obj = Output.objects.filter(input_ids_id=id)[0]
     return render(request,'result.html',{'results':obj})
 
 def get_images(request,pk):
