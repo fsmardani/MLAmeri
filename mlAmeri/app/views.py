@@ -68,7 +68,7 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
                                 (0, 0, 255), 5)
     im = Image.fromarray(imtest)
     Out_M_Image = im
-    # im.save(ResultDir_M+'/1.png')
+    im.save(ResultDir_M+'/1.png')
 
     imtest = cv2.imread(SourceInputImageDir, 1)
     CalcIm = imtest
@@ -107,7 +107,7 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
                                 (0, 255, 0), 5)
     im = Image.fromarray(CalcIm)
     Out_C_Image = im
-    # im.save(ResultDir_C+'/2.png')
+    im.save(ResultDir_C+'/2.png')
 
     M_C_Im = imtest
     WindowShape = M_WindowShape
@@ -132,14 +132,19 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
                             5)
     im = Image.fromarray(M_C_Im)
     Out_M_C_Image = im
-    # im.save(ResultDir_M_C+'/3.png')
+    im.save(ResultDir_M_C+'/3.png')
+    # a,b,c = image
+
+    
     return Out_M_Image, Out_C_Image, Out_M_C_Image
 
 
 # @csrf_exempt
 def index(request):
     if request.method=='POST':
+       
         if request.FILES:
+            print(request.FILES , request.POST)
             if int(request.POST.get("min", None))>=50 and int(request.POST.get("max", None))<=500:
                 obj = Input.objects.create(image=request.FILES.get("image"),variable_1=int(request.POST.get("min")),variable_2=int(request.POST.get("max")))
                 c_res,m_res,cm_res =DETECTING(f'{obj.image}', int(request.POST.get("min")), int(request.POST.get("max")))
@@ -148,6 +153,8 @@ def index(request):
                 return redirect(reverse('result'))
         else:
             return HttpResponse(request.FILES)
+   
+   
     if request.method=='GET':
         return render(request,'app.html')
 
@@ -159,3 +166,5 @@ def get_images(request,pk):
     inputq = Input.objects.filter(pk=pk)[0]
     return render(request,'app.html',{'input':inputq})
 
+def x(pic , path):
+    Output.objects.create(pic)
