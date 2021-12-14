@@ -2,18 +2,89 @@
 {% load static %}
 {% block content %}
 <div align="center">
-    <br>
-    <br>
-    <img src="{{results.Cimage.url}}" alt="" width="220" height="140">
-    <img src="{{results.Mimage.url}}" alt="" width="220" height="140">
-    <img src="{{results.CMimage.url}}" alt="" width="220" height="140">
+    <!-- <br>
     <br>
     <img src="{{results.Cimage.url}}" alt="" >
     <br>
     <img src="{{results.Mimage.url}}" alt="" >
     <br>
-    <img src="{{results.CMimage.url}}" alt="">
+    <img src="{{results.CMimage.url}}" alt=""> -->
     <hr>
-    <a class="btn btn-primary" href="{% url 'index' %}">Home</a>
+
+
+<div>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#1" aria-controls="1" role="tab" data-toggle="tab">Home</a></li>
+      <li role="presentation"><a href="{{results.CMimage.url}}" aria-controls="2" role="tab" data-toggle="tab">Method CM</a></li>
+      <li role="presentation"><a href="{{results.Mimage.url}}" aria-controls="3" role="tab" data-toggle="tab">Method M</a></li>
+      <li role="presentation"><a href= "{{results.Cimage.url}}" aria-controls="4" role="tab" data-toggle="tab">Method C</a></li>
+    </ul>
+  
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="1">1</div>
+
+      <div role="tabpanel" class="tab-pane" id="2">
+              <img src="{{results.CMimage.url}}" alt="">
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="3"> 
+      2       <img src="{{results.Mimage.url}}" alt="" >
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="4">
+              <img src="{{results.Cimage.url}}" alt="" >
+      </div>
+      <div role="tabpanel" class="tab-pane" id="5">5</div>
+      <div role="tabpanel" class="tab-pane" id="6">6</div>
+      <div role="tabpanel" class="tab-pane" id="7">7</div>
+      <div role="tabpanel" class="tab-pane" id="8">8</div>
+    </div>
+  
+  </div>
+
+
+  <a class="btn btn-primary" href="{% url 'index' %}">Home</a>
 </div>
+
+<img height="100" width="80" id="1" data-toggle="modal" data-target="#myModal" src="{{results.Cimage.url}}" alt='Text dollar code part one.' />
+<img height="100" width="80" id="2" data-toggle="modal" data-target="#myModal" src="{{results.Mimage.url}}" alt='Text dollar code part one.' />
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img class="img-responsive" src="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function () {
+    $('img').on('click', function () {
+        var image = $(this).attr('src');
+        $('#myModal').on('show.bs.modal', function () {
+            $(".img-responsive").attr("src", image);
+        });
+    });
+});
+</script>
+
+<script>
+$(document).ready(function () {
+    $('img').on('click', function () {
+        var image = $(this).attr('src');
+        $('#myModal').on('show.bs.modal', function () {
+            $(".img-responsive").attr("src", image);
+        });
+    });
+});
+</script>
+    </script>
 {% endblock content %}
