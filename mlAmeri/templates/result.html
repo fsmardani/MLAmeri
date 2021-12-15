@@ -1,64 +1,74 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
- <ul class="navbar-nav">
-    <li class="nav-item">
-      <a class="nav-link" href="#">test</a>
-    </li>
-</nav>
-<div align="center">
-    <br>
-    <br>
-    <div>
-        <img src="{{results.Cimage.url}}" alt="" >
-    <br>
+
+
+<div >
+    <div class="nav nav-tabs" role="tablist" align="center">
+        <div role="presentation" class="active">
+            <a href="#1" aria-controls="1" role="tab" data-toggle="tab">CM Model</a></div>
+        <div role="presentation">
+            <a href="#2" aria-controls="2" role="tab" data-toggle="tab">M Model</a></div>
+        <div role="presentation">
+            <a href="#3" aria-controls="3" role="tab" data-toggle="tab">C Model</a></div>
     </div>
+</div>
 
-    <div>
+<!-- Tab panes -->
+<div>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="1">
+            <img height="100" width="80" data-toggle="modal" data-target="#myModal" src="{{results.CMimage.url}}"
+                 alt='Text dollar code part one.'/></div>
+        <div role="tabpanel" class="tab-pane" id="2">
+            <img height="100" width="80" data-toggle="modal" data-target="#myModal" src="{{results.Mimage.url}}"
+                 alt='Text dollar code part one.'/></div>
+        <div role="tabpanel" class="tab-pane" id="3">
+             <img height="100" width="80" data-toggle="modal" data-target="#myModal" src="{{results.Cimage.url}}"
+                      alt='Text dollar code part one.'/>
+        </div>
+    </div>
+</div>
 
-    
+<div id="myModal" class="modal fade" role="dialog" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img class="img-responsive" src="{{results.Cimage.url}}"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function () {
+    $('img').on('click', function () {
+        var image = $(this).attr('src');
+        $('#myModal').on('show.bs.modal', function () {
+            $(".img-responsive").attr("src", image);
+        });
+    });
+});
+
+
+
+
+</script>
+<!--</div>-->
+<div align="center">
+    <!-- <br>
+    <br>
+    <img src="{{results.Cimage.url}}" alt="" >
+    <br>
     <img src="{{results.Mimage.url}}" alt="" >
     <br>
-    </div>
-    <div>
-
-    <img src="{{results.CMimage.url}}" alt="">
+    <img src="{{results.CMimage.url}}" alt=""> -->
     <hr>
-    </div>
-
-
-</div>
-<style>
-.btn {
-  background-color: DodgerBlue;
-  border: none;
-  color: white;
-  padding: 12px 30px;
-  cursor: pointer;
-  font-size: 20px;
-}
-
-/* Darker background on mouse-over */
-.btn:hover {
-  background-color: RoyalBlue;
-}
-</style>
-<!-- Add icon library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<div align="center">
-<br>
- <a href="{{results.CMimage.url}}" download="{{results.CMimage}}">
-<button class="btn" style="width:15%">
-    <i class="fa fa-download">
-
-</i> Download</button>
-</a>
-</div>
-
-
-<div align="center">
-<br>
     <a class="btn btn-primary" href="{% url 'index' %}">Home</a>
+
 </div>
+
 {% endblock content %}
