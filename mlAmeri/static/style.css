@@ -65,7 +65,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 }
 
 body {
-  background-image: url("https://assets.skyfilabs.com/images/blog/free-image-processing-project-ideas.webp");
+  background-image: url("/static/background.jpg");
   background-repeat: no-repeat;
 
 }
