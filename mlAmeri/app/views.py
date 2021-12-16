@@ -165,6 +165,8 @@ def save_to_output(input,c_res,m_res,cm_res):
 
 def result(request,id):
     obj = Output.objects.filter(input_ids_id=id)[0]
+    # target = Output.objects.filter(input_ids_id=id).delete()
+    # print("deleted")
     return render(request,'result.html',{'results':obj})
 
 def get_images(request,pk):
