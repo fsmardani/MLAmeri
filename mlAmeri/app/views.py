@@ -157,7 +157,6 @@ def index(request):
 
 
 def save_to_output(input,c_res,m_res,cm_res):
-    print(input.id,c_res,m_res,cm_res)
     c_res.save(f'Output/c{input.id}.jpg')
     m_res.save(f'Output/m{input.id}.jpg')
     cm_res.save(f'Output/cm{input.id}.jpg')
