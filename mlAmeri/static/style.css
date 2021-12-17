@@ -67,7 +67,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 body {
   background-image: url("/static/background.jpg");
   background-repeat: no-repeat;
-  margin-bottom:80px;
+  margin-bottom:150px;
 
 }
 
