@@ -96,20 +96,23 @@
 </style>
 
 <!-- Tab links -->
-
-<div class="tab">
+<div align="center">
+<div class="tab" align="center">
     <button class="tablinks" onclick="openCity(event, 'CM model')">CM Model</button>
-    <button class="tablinks" onclick="openCity(event, 'M Model')">C Model</button>
-    <button class="tablinks" onclick="openCity(event, 'C Model')">M Model</button>
+    <button class="tablinks" onclick="openCity(event, 'M Model')">M Model</button>
+    <button class="tablinks" onclick="openCity(event, 'C Model')">C Model</button>
+</div>
 </div>
 
 <!-- Tab content -->
-<div class="img-magnifier-container">
-    <div id="CM model" class="tabcontent" align="center">
+<div class="img-magnifier-container" id="defaultOpen">
+    <div id="CM model" class="tabcontent active" align="center">
         <img id='myimageCM' data-toggle="modal" data-target="#myModal" src="{{results.CMimage.url}}"
              alt='results.CMimage'/>
         <a href="{{results.CMimage.url}}" download="{{results.CMimage}}">
+             <div class="col-md-4">
             <button class="btn-download">Download</button>
+                </div>
         </a>
     </div>
 </div>
@@ -119,7 +122,9 @@
         <img id='myimageM' data-toggle="modal" data-target="#myModal" src="{{results.Mimage.url}}"
              alt='{{results.Mimage}}'/>
         <a href="{{results.Mimage.url}}" download="{{results.Mimage}}">
+            <div class="col-md-4">
             <button class="btn-download">Download</button>
+                </div>
         </a>
     </div>
 </div>
@@ -129,7 +134,9 @@
         <img id='myimage' data-toggle="modal" data-target="#myModal" src="{{results.Cimage.url}}"
              alt='{{results.Cimage}}'/>
         <a href="{{results.Cimage.url}}" download="{{results.Cimage}}">
+             <div class="col-md-4">
             <button class="btn-download">Download</button>
+                </div>
         </a>
     </div>
 </div>
@@ -309,9 +316,6 @@ imageZoom("myimage", "myresult");
 
 
 </script>
-<script>
-    magnify("myimageCM", 4);
-</script>
 
 <script>
     function magnify(imgID, zoom) {
@@ -379,9 +383,14 @@ imageZoom("myimage", "myresult");
 
 </script>
 <script>
+    magnify("myimageCM", 3.5);
+</script>
+<script>
     magnify("myimageM", 3.5);
 </script>
-
+<script>
+    magnify("myimage", 3.5);
+</script>
 <script>
      function magnify(imgID, zoom) {
   var img, glass, w, h, bw;

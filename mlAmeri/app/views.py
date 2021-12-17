@@ -137,7 +137,7 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
     im = Image.fromarray(M_C_Im)
     Out_M_C_Image = im
     # im.save(ResultDir_M_C+'/3.png')
-    return Out_M_Image, Out_C_Image, Out_M_C_Image
+    return Out_C_Image, Out_M_Image, Out_M_C_Image
 
 
 # @csrf_exempt
