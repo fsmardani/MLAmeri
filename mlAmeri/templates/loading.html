@@ -1,0 +1,43 @@
+{% block loader %}
+<style>
+#circle {
+    position: absolute;
+    top: 63%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+	width: 250;
+    height: 150;
+}
+
+.loader {
+    width: calc(100% - 0px);
+	height: calc(100% - 0px);
+	border: 8px solid #162534;
+	border-top: 10px solid #09f;
+	border-radius: 100%;
+	animation: rotate 5s linear infinite;
+}
+
+@keyframes rotate {
+100% {transform: rotate(360deg);}
+}
+
+</style>
+<div id="circle" style="visibility: visible;">
+    <div class="loader">
+        <div class="loader">
+            <div class="loader">
+                <div class="loader">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+   function ShowLoader() {
+     document.getElementById("circle").style.visibility = "visible";
+     }
+</script>
+{% endblock loader %}
