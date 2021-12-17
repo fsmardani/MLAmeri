@@ -17,4 +17,4 @@ RUN apk update \
 
 RUN pip install --upgrade pip
 
-RUN sudo pip install -r requirements.txt
+RUN pip install -r requirements.txt
