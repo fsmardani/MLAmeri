@@ -1,0 +1,13 @@
+*.png
+*.PNG
+*.jpg
+*.JPG
+*.jpeg
+*.JPEG
+
+db.sqlite3
+venv/
+temp/
+media/
+Input/
+Output/

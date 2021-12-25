@@ -10,45 +10,48 @@
 />
 
 <br>
-        <br>
-        <br>
+<br>
+<br>
 <div class="container d-flex justify-content-center mt-100" style="background-color: rgba(255, 255, 255, 0.7);">
 
     <div class="row">
 
         <form action="{% url 'index' %}" class="form-horizontal" enctype="multipart/form-data" method="post">
             <div class="col-md-12">
-                    <br>
-    <br>
-            {% csrf_token %}
-            <input class="form-control" name="image" required type="file">
+                <br>
+                <br>
+                {% csrf_token %}
+                <input class="form-control" name="image" required type="file">
                 <div class="col-md-4">
-                    <label class="form-label" >VAR 1</label>
+                    <label class="form-label">VAR 1</label>
                     <div class="range-wrap">
                         <div class="range-value" id="rangeV"></div>
                         {% csrf_token %}
-                        <input id="range"  max="500" min="50" name='min' type="range" value="150">
+                        <input id="range" max="500" min="50" name='min' type="range" value="150">
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label" >VAR 2</label>
+                    <label class="form-label">VAR 2</label>
                     <div class="range-wrap">
-                        <div class="range-value" id="rangeVV" ></div>
+                        <div class="range-value" id="rangeVV"></div>
                         {% csrf_token %}
-                        <input id="rangee"  max="500" min="50" name='max' type="range" value="350">
+                        <input id="rangee" max="500" min="50" name='max' type="range" value="350">
 
                     </div>
                 </div>
-                <input class="btn btn-primary btn-sm" type="submit" value="Upload" >
+                <input id=1 class="btn btn-primary btn-sm" type="submit" value="Run" onclick="ShowLoader()">
+            </div>
 
-<!--                <button class="btn btn-primary" type="submit">Result</button>-->
-                        </div>
         </form>
+
     </div>
+
+    <br>
+    <br>
 </div>
 
 
-<img src="{{input.image.url}}">
+
 <script>
 const
   range = document.getElementById('range'),
@@ -62,6 +65,8 @@ const
   };
 document.addEventListener("DOMContentLoaded", setValue);
 range.addEventListener('input', setValue);
+
+
 </script>
 <script>
 const
@@ -76,6 +81,14 @@ const
   };
 document.addEventListener("DOMContentLoaded", setValuee);
 rangee.addEventListener('input', setValuee);
+
+
+</script>
+
+<script>
+  function ShowLoader() {
+    document.getElementById("circle").style.visibility = "hidden";
+    }
 </script>
 
 {% endblock content %}
