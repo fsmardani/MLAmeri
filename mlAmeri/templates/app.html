@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+{% load cache %}
+
 <link href="{% static 'style.css' %}" rel="stylesheet">
 <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <link
@@ -26,8 +28,7 @@
                     <label class="form-label">VAR 1</label>
                     <div class="range-wrap">
                         <div class="range-value" id="rangeV"></div>
-                        {% csrf_token %}
-                        <input id="range" max="500" min="50" name='min' type="range" value="150">
+                        <label for="range">{% csrf_token %}</label><input id="range" max="500" min="50" name='min' type="range" value="150">
                     </div>
                 </div>
                 <div class="col-md-6">

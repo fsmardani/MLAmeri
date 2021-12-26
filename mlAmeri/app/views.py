@@ -142,7 +142,7 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape, u):
     return Out_C_Image, Out_M_Image, Out_M_C_Image
 
 
-# @csrf_exempt
+@csrf_exempt
 def index(request):
     if request.method == 'POST':
         if request.FILES:
