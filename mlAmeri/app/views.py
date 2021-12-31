@@ -1,33 +1,37 @@
+import datetime
+from io import StringIO
 from uuid import uuid4
 
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
-import tensorflow as tf
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.urls import reverse
 from tensorflow import keras
 from cv2 import cv2
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 from tensorflow.keras.applications.resnet50 import preprocess_input, decode_predictions
 from tensorflow.keras.preprocessing import image
+import tensorflow as tf
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 import uuid
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
-from .models import Input,Output
+from .models import Input, Output
+
 # from utils import coutput_path,moutput_path,cmoutput_path
+u = datetime.datetime.now()
 
 
-def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
+def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape, u):
     M_NetDir = 'app/CNN.h5'
     C_NetDir = 'app/CNN.h5'
     ResultDir_C = 'output'
-    TemplatePachDir = 'temp'
+    TemplatePachDir = f'temp'
     ResultDir_M = 'output'
     ResultDir_M_C = 'output'
-
 
     imtest = cv2.imread(SourceInputImageDir, 1)
     model = keras.models.load_model(M_NetDir)
@@ -51,13 +55,14 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
                 ZeroPachesNumber = ZeroPachesNumber + 1
             else:
                 im = Image.fromarray(CNNFeedPic)
-                im.save(TemplatePachDir+'/1.png')
+                im.save(TemplatePachDir + f'/1-{u}.png')
                 [img_height, img_width] = [160, 160]
-                img = keras.preprocessing.image.load_img(TemplatePachDir+'/1.png', target_size=(img_height, img_width))
+                img = keras.preprocessing.image.load_img(TemplatePachDir + f'/1-{u}.png',
+                                                         target_size=(img_height, img_width))
                 img_array = keras.preprocessing.image.img_to_array(img)
                 img_array = tf.expand_dims(img_array, 0)
                 predictions = model.predict(img_array)
-                Tempimage = plt.imread(TemplatePachDir+"/1.png")
+                Tempimage = plt.imread(TemplatePachDir + f"/1-{u}.png")
                 if predictions[0].sum() > 0:
                     PatchPosition_M[i, j] = 1
                     k = k + 1
@@ -68,7 +73,7 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
                                 (0, 0, 255), 5)
     im = Image.fromarray(imtest)
     Out_M_Image = im
-    im.save(ResultDir_M+'/1.png')
+    # im.save(ResultDir_M+'/1.png')
 
     imtest = cv2.imread(SourceInputImageDir, 1)
     CalcIm = imtest
@@ -90,13 +95,18 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
                 ZeroPachesNumber = ZeroPachesNumber + 1
             else:
                 im = Image.fromarray(CNNFeedPic)
-                im.save(TemplatePachDir+'/2.png')
+                im.save(TemplatePachDir + f'/2-{u}.png')
                 [img_height, img_width] = [160, 160]
-                img = keras.preprocessing.image.load_img(TemplatePachDir+'/2.png', target_size=(img_height, img_width))
+                img = keras.preprocessing.image.load_img(TemplatePachDir + f'/2-{u}.png',
+                                                         target_size=(img_height, img_width))
                 img_array = keras.preprocessing.image.img_to_array(img)
+
+                print("start", datetime.datetime.now())
                 img_array = tf.expand_dims(img_array, 0)
+                print("end", datetime.datetime.now())
+
                 predictions = model.predict(img_array)
-                Tempimage = plt.imread(TemplatePachDir+'/2.png')
+                Tempimage = plt.imread(TemplatePachDir + f'/2-{u}.png')
                 if predictions[0].sum() > 0:
                     PatchPosition_C[i, j] = 1
                     k = k + 1
@@ -107,7 +117,7 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
                                 (0, 255, 0), 5)
     im = Image.fromarray(CalcIm)
     Out_C_Image = im
-    im.save(ResultDir_C+'/2.png')
+    # im.save(ResultDir_C+'/2.png')
 
     M_C_Im = imtest
     WindowShape = M_WindowShape
@@ -132,39 +142,45 @@ def DETECTING(SourceInputImageDir, M_WindowShape, C_WindowShape):
                             5)
     im = Image.fromarray(M_C_Im)
     Out_M_C_Image = im
-    im.save(ResultDir_M_C+'/3.png')
-    # a,b,c = image
-
-    
-    return Out_M_Image, Out_C_Image, Out_M_C_Image
+    # im.save(ResultDir_M_C+'/3.png')
+    return Out_C_Image, Out_M_Image, Out_M_C_Image
 
 
-# @csrf_exempt
+@csrf_exempt
 def index(request):
-    if request.method=='POST':
-       
+    if request.method == 'POST':
         if request.FILES:
-            print(request.FILES , request.POST)
-            if int(request.POST.get("min", None))>=50 and int(request.POST.get("max", None))<=500:
-                obj = Input.objects.create(image=request.FILES.get("image"),variable_1=int(request.POST.get("min")),variable_2=int(request.POST.get("max")))
-                c_res,m_res,cm_res =DETECTING(f'{obj.image}', int(request.POST.get("min")), int(request.POST.get("max")))
-                print(type(c_res))
-                Output.objects.create(input_ids=obj,Cimage=c_res,Mimage=m_res,CMimage=cm_res)
-                return redirect(reverse('result'))
+            if int(request.POST.get("min", None)) >= 50 and int(request.POST.get("max", None)) <= 500:
+                obj = Input.objects.create(image=request.FILES.get("image"), variable_1=int(request.POST.get("min")),
+                                           variable_2=int(request.POST.get("max")))
+                c_res, m_res, cm_res = DETECTING(f'{obj.image}',
+                                                 int(request.POST.get("min")),
+                                                 int(request.POST.get("max")),
+                                                 u)
+                save_to_output(obj, c_res, m_res, cm_res)
+                # Output.objects.create(input_ids=obj,Cimage=c_res,Mimage=m_res,CMimage=cm_res)
+                return redirect(reverse('result', kwargs={'id': obj.id}))
         else:
             return HttpResponse(request.FILES)
-   
-   
-    if request.method=='GET':
-        return render(request,'app.html')
+    if request.method == 'GET':
+        return render(request, 'app.html')
 
-def result(request,id):
-    obj = Output.objects.filter(input__id=id)[0]
-    return render(request,'result.html',{'results':obj})
 
-def get_images(request,pk):
+def save_to_output(input, c_res, m_res, cm_res):
+    c_res.save(f'Output/c{input.id}.jpg')
+    m_res.save(f'Output/m{input.id}.jpg')
+    cm_res.save(f'Output/cm{input.id}.jpg')
+    Output.objects.create(input_ids=input, Cimage=f'Output/c{input.id}.jpg', Mimage=f'Output/m{input.id}.jpg',
+                          CMimage=f'Output/cm{input.id}.jpg')
+
+
+def result(request, id):
+    obj = Output.objects.filter(input_ids_id=id)[0]
+    # target = Output.objects.filter(input_ids_id=id).delete()
+    # print("deleted")
+    return render(request, 'result.html', {'results': obj})
+
+
+def get_images(request, pk):
     inputq = Input.objects.filter(pk=pk)[0]
-    return render(request,'app.html',{'input':inputq})
-
-def x(pic , path):
-    Output.objects.create(pic)
+    return render(request, 'app.html', {'input': inputq})
